@@ -5,29 +5,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MemberList {
+public class Category {
 
     @Id @GeneratedValue
-    @Column(name = "MEMBER_LIST_ID")
+    @Column(name = "CATEGORY_ID")
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "MEMBER_ID")
-    private Member member;
 
     @ManyToOne
     @JoinColumn(name = "TEAM_ID")
     private Team team;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private CategoryType categoryType;
 
-    private LocalDateTime joinedAt;
-    private LocalDateTime secessionAt;
-
+    public Category(CategoryType categoryType) {
+        this.categoryType = categoryType;
+    }
 }
