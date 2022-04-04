@@ -15,13 +15,13 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Team {
+public class Team extends EntityDate {
 
     @Id @GeneratedValue
     @Column(name = "TEAM_ID")
     private Long id;
 
-    @Column(name = "TEAM_NAME")
+    @Column(name = "TEAM_NAME", nullable = false, unique = true)
     private String name;
 
     @Column(name = "TEAM_INTRODUCE")
@@ -29,10 +29,4 @@ public class Team {
 
     @OneToMany(mappedBy = "team")
     private Set<MemberList> members = new HashSet<>();
-
-    @OneToMany(mappedBy = "team")
-    private Set<Category> categories = new HashSet<>();
-
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

@@ -15,26 +15,24 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Member {
+public class Member extends EntityDate {
 
     @Id @GeneratedValue
     @Column(name = "MEMBER_ID")
     private Long id;
 
-    @Column(name = "MEMBER_NAME")
+    @Column(name = "MEMBER_NAME", nullable = false, unique = true)
     private String name;
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(name = "MEMBER_INTRODUCE")
     private String introduce;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
-    public Member(String name, String email, String introduce, LocalDateTime createdAt, LocalDateTime updatedAt) {
+
+    public Member(String name, String email, String introduce) {
         this.name = name;
         this.email = email;
         this.introduce = introduce;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 }
