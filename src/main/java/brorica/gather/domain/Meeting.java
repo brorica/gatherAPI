@@ -39,7 +39,7 @@ public class Meeting extends EntityDate {
 
     @Column(nullable = false)
     private Integer maximum;
-    
+
     private LocalDateTime startAt;
     private LocalDateTime endAt;
 }

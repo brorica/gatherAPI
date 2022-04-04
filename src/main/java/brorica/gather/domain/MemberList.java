@@ -3,8 +3,6 @@ package brorica.gather.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,6 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "MEMBER_LIST")
 public class MemberList {
 
     @Id @GeneratedValue
@@ -31,5 +30,7 @@ public class MemberList {
     
     private LocalDateTime joinedAt;
     private LocalDateTime secessionAt;
+
+
 
 }

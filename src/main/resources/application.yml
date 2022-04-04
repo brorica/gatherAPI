@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:h2:file:~/gather
+    url: jdbc:h2:tcp://localhost/~/gather;
     username: sa
     password:
     driver-class-name: org.h2.Driver

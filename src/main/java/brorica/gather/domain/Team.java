@@ -6,9 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,9 +22,15 @@ public class Team extends EntityDate {
     @Column(name = "TEAM_NAME", nullable = false, unique = true)
     private String name;
 
+    @Lob @Basic(fetch=FetchType.LAZY)
     @Column(name = "TEAM_INTRODUCE")
-    private String introduce;
+    private byte[] introduce;
 
     @OneToMany(mappedBy = "team")
     private Set<MemberList> members = new HashSet<>();
+
+    public Team(String name, byte[] introduce) {
+        this.name = name;
+        this.introduce = introduce;
+    }
 }
