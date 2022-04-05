@@ -9,11 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberService {
 
     private final MemberRepository memberRepository;
 
+    @Transactional(readOnly = false)
     public Long save(Member member) {
         validateDuplicateMemberName(member);
         validateDuplicateMemberEmail(member);

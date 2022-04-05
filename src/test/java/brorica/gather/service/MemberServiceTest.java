@@ -59,7 +59,6 @@ class MemberServiceTest {
         });
     }
 
-
     public Member createMember(String name, String email) {
         return new Member(name, email, "introduce");
     }
