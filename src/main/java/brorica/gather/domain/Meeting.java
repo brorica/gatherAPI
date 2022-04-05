@@ -15,18 +15,18 @@ import java.time.LocalDateTime;
 public class Meeting extends EntityDate {
 
     @Id @GeneratedValue
-    @Column(name = "MEETING_ID")
+    @Column(name = "meeting_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TEAM_ID")
+    @JoinColumn(name = "team_id")
     private Team team;
 
-    @Column(name = "MEETING_NAME")
+    @Column(name = "meeting_name")
     private String name;
 
     @Enumerated(EnumType.STRING)

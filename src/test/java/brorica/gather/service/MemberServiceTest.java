@@ -48,7 +48,7 @@ class MemberServiceTest {
     public void 중복된이메일탐지() {
         // given
         Member member1 = createMember("name1", "email1");
-        Member member2 = createMember("name2", "email2");
+        Member member2 = createMember("name2", "email1");
 
         // when
         memberService.save(member1);

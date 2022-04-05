@@ -14,15 +14,15 @@ import javax.persistence.*;
 public class Member extends EntityDate {
 
     @Id @GeneratedValue
-    @Column(name = "MEMBER_ID")
+    @Column(name = "member_id")
     private Long id;
 
-    @Column(name = "MEMBER_NAME", nullable = false, unique = true)
+    @Column(name = "member_name", nullable = false, unique = true)
     private String name;
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(name = "MEMBER_INTRODUCE")
+    @Column(name = "member_introduce")
     private String introduce;
 
 

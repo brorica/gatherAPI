@@ -16,14 +16,14 @@ import java.util.Set;
 public class Team extends EntityDate {
 
     @Id @GeneratedValue
-    @Column(name = "TEAM_ID")
+    @Column(name = "team_id")
     private Long id;
 
-    @Column(name = "TEAM_NAME", nullable = false, unique = true)
+    @Column(name = "team_name", nullable = false, unique = true)
     private String name;
 
     @Lob @Basic(fetch=FetchType.LAZY)
-    @Column(name = "TEAM_INTRODUCE")
+    @Column(name = "team_introduce")
     private byte[] introduce;
 
     @OneToMany(mappedBy = "team")
