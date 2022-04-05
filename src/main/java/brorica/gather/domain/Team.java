@@ -26,8 +26,18 @@ public class Team extends EntityDate {
     @Column(name = "team_introduce")
     private byte[] introduce;
 
-    @OneToMany(mappedBy = "team")
+    @OneToMany(
+            mappedBy = "team",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private Set<MemberList> members = new HashSet<>();
+
+    public void addMember(Member member) {
+        MemberList memberList = new MemberList(this, member);
+        members.add(memberList);
+        member.getBelongs().add(memberList);
+    }
 
     public Team(String name, byte[] introduce) {
         this.name = name;
