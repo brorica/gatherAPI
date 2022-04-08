@@ -10,14 +10,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @SpringBootTest
 @Transactional
-@Rollback(value = false)
 public class MemberListTest {
 
     @Autowired
@@ -38,8 +36,41 @@ public class MemberListTest {
         teamRepository.save(team);
         team.addMember(member);
         List<MemberList> members = memberListRepository.findByTeamId(team.getId());
+        MemberList findMember = members.stream()
+            .filter(id -> id.getMember().getId().equals(member.getId()))
+            .findAny()
+            .get();
 
         // then
-        Assertions.assertEquals(team.getId(), members.get(0).getTeam().getId());
+        Assertions.assertEquals(member.getId(), findMember.getMember().getId());
+    }
+
+    @Test
+    public void 모임_내에서_특정_구성원_찾기() {
+        // given
+        Member member1 = new Member("name1", "email1", "introduce");
+        Member member2 = new Member("name2", "email2", "introduce");
+        Member member3 = new Member("name3", "email3", "introduce");
+        Team team1 = new Team("team1", null);
+        Team team2 = new Team("team2", null);
+
+        // when
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+        memberRepository.save(member3);
+        teamRepository.save(team1);
+        teamRepository.save(team2);
+        team1.addMember(member1);
+        team1.addMember(member3);
+        team2.addMember(member2);
+
+        List<MemberList> members = memberListRepository.findByTeamId(team1.getId());
+        MemberList findMember = members.stream()
+            .filter(id -> id.getMember().getId().equals(member3.getId()))
+            .findAny()
+            .get();
+
+        // then
+        Assertions.assertEquals(member1.getId(), findMember.getMember().getId());
     }
 }

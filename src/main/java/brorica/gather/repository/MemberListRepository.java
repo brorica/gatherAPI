@@ -14,7 +14,8 @@ public class MemberListRepository {
     private final EntityManager em;
 
     public List<MemberList> findByTeamId(Long id) {
-        return em.createQuery("select m from member_list m where m.team_id = :id", MemberList.class)
+        return em.createQuery("select m from MemberList as m where m.team.id = :team_id",
+            MemberList.class)
             .setParameter("team_id", id)
             .getResultList();
     }
