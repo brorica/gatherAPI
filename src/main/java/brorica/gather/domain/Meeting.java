@@ -14,7 +14,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Meeting extends EntityDate {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "meeting_id")
     private Long id;
 

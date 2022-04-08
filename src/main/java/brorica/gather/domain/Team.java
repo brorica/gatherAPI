@@ -15,21 +15,23 @@ import java.util.Set;
 @AllArgsConstructor
 public class Team extends EntityDate {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "team_id")
     private Long id;
 
     @Column(name = "team_name", nullable = false, unique = true)
     private String name;
 
-    @Lob @Basic(fetch=FetchType.LAZY)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
     @Column(name = "team_introduce")
     private byte[] introduce;
 
     @OneToMany(
-            mappedBy = "team",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+        mappedBy = "team",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
     )
     private Set<MemberList> members = new HashSet<>();
 

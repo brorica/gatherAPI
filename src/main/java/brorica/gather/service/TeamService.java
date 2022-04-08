@@ -24,7 +24,7 @@ public class TeamService {
 
     public void validateDuplicateTeamName(Team team) {
         List<Team> findTeams = teamRepository.findByName(team.getName());
-        if(!findTeams.isEmpty()) {
+        if (!findTeams.isEmpty()) {
             throw new IllegalStateException("중복된 모임명입니다.");
         }
     }

@@ -15,7 +15,8 @@ import java.util.Set;
 @AllArgsConstructor
 public class Member extends EntityDate {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "member_id")
     private Long id;
 
@@ -29,9 +30,9 @@ public class Member extends EntityDate {
     private String introduce;
 
     @OneToMany(
-            mappedBy = "member",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+        mappedBy = "member",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
     )
     private Set<MemberList> belongs = new HashSet<>();
 

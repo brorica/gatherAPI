@@ -15,7 +15,8 @@ import java.util.Objects;
 @Table(name = "member_list")
 public class MemberList implements Serializable {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "member_list_id")
     private Long id;
 
@@ -29,25 +30,30 @@ public class MemberList implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-    
+
     private LocalDateTime joinedAt;
     private LocalDateTime secessionAt;
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         MemberList that = (MemberList) o;
         return Objects.equals(getId(), that.getId()) &&
-                Objects.equals(getMember(), that.getMember()) &&
-                Objects.equals(getTeam(), that.getTeam()) &&
-                getRole() == that.getRole() && Objects.equals(getJoinedAt(), that.getJoinedAt()) &&
-                Objects.equals(getSecessionAt(), that.getSecessionAt());
+            Objects.equals(getMember(), that.getMember()) &&
+            Objects.equals(getTeam(), that.getTeam()) &&
+            getRole() == that.getRole() && Objects.equals(getJoinedAt(), that.getJoinedAt()) &&
+            Objects.equals(getSecessionAt(), that.getSecessionAt());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getMember(), getTeam(), getRole(), getJoinedAt(), getSecessionAt());
+        return Objects
+            .hash(getId(), getMember(), getTeam(), getRole(), getJoinedAt(), getSecessionAt());
     }
 
     public MemberList(Team team, Member member) {

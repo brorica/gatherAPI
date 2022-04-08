@@ -19,7 +19,7 @@ class TeamServiceTest {
 
     @Autowired
     TeamRepository teamRepository;
-    
+
     @Test
     public void 모임생성() {
         // given

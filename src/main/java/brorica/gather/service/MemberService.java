@@ -25,14 +25,14 @@ public class MemberService {
 
     public void validateDuplicateMemberName(Member member) {
         List<Member> findMembers = memberRepository.findByName(member.getName());
-        if(!findMembers.isEmpty()) {
+        if (!findMembers.isEmpty()) {
             throw new IllegalStateException("중복된 이름입니다.");
         }
     }
 
     public void validateDuplicateMemberEmail(Member member) {
         List<Member> findMembers = memberRepository.findByEmail(member.getEmail());
-        if(!findMembers.isEmpty()) {
+        if (!findMembers.isEmpty()) {
             throw new IllegalStateException("중복된 이메일입니다.");
         }
     }

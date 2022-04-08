@@ -1,6 +1,5 @@
 package brorica.gather.repository;
 
-import brorica.gather.domain.Member;
 import brorica.gather.domain.MemberList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -16,7 +15,7 @@ public class MemberListRepository {
 
     public List<MemberList> findByTeamId(Long id) {
         return em.createQuery("select m from member_list m where m.team_id = :id", MemberList.class)
-                .setParameter("team_id", id)
-                .getResultList();
+            .setParameter("team_id", id)
+            .getResultList();
     }
 }

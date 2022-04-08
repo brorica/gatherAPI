@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @Getter
 public abstract class EntityDate {
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
