@@ -23,7 +23,7 @@ class MemberServiceTest {
     @Test
     public void 회원가입() {
         // given
-        Member member = createMember("name1", "email1");
+        Member member = createMember("member1", "email1");
         // when
         Long saveId = memberService.save(member);
         // then
@@ -33,8 +33,8 @@ class MemberServiceTest {
     @Test
     public void 중복된이름탐지() {
         // given
-        Member member1 = createMember("name1", "email1");
-        Member member2 = createMember("name1", "email2");
+        Member member1 = createMember("member1", "email1");
+        Member member2 = createMember("member1", "email2");
 
         // when
         memberService.save(member1);
@@ -48,8 +48,8 @@ class MemberServiceTest {
     @Test
     public void 중복된이메일탐지() {
         // given
-        Member member1 = createMember("name1", "email1");
-        Member member2 = createMember("name2", "email1");
+        Member member1 = createMember("member1", "email1");
+        Member member2 = createMember("member2", "email1");
 
         // when
         memberService.save(member1);

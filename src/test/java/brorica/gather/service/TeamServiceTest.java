@@ -1,7 +1,10 @@
 package brorica.gather.service;
 
+import brorica.gather.domain.Member;
+import brorica.gather.domain.MemberList;
 import brorica.gather.domain.Team;
 import brorica.gather.repository.TeamRepository;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +62,6 @@ class TeamServiceTest {
         // then
         assertEquals(team.getIntroduce(), findTeam.getIntroduce());
     }
-
 
     public Team createTeam(String name) {
         String introduce = "test introduce";

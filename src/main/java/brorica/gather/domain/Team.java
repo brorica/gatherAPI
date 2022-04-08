@@ -37,8 +37,16 @@ public class Team extends EntityDate {
     )
     private Set<MemberList> members = new HashSet<>();
 
-    public void addMember(Member member, Role role) {
-        MemberList memberList = new MemberList(this, member, role);
+    // 모임을 개설하는 멤버는 MANAGER 등급
+    public void memberCreateTeam(Member member) {
+        MemberList memberList = new MemberList(this, member, Role.MANAGER);
+        members.add(memberList);
+        member.getBelongs().add(memberList);
+    }
+
+    // 모임에 처음 가입할 땐 일반 등급
+    public void addMember(Member member) {
+        MemberList memberList = new MemberList(this, member, Role.GENERAL);
         members.add(memberList);
         member.getBelongs().add(memberList);
     }
