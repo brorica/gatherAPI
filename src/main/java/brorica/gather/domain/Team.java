@@ -37,8 +37,8 @@ public class Team extends EntityDate {
     )
     private Set<MemberList> members = new HashSet<>();
 
-    public void addMember(Member member) {
-        MemberList memberList = new MemberList(this, member);
+    public void addMember(Member member, Role role) {
+        MemberList memberList = new MemberList(this, member, role);
         members.add(memberList);
         member.getBelongs().add(memberList);
     }

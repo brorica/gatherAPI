@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member_list")
 @EqualsAndHashCode
-public class MemberList implements Serializable {
+public class MemberList extends EntityDate {
 
     @Id
     @GeneratedValue
@@ -32,11 +31,11 @@ public class MemberList implements Serializable {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private LocalDateTime joinedAt;
     private LocalDateTime secessionAt;
 
-    public MemberList(Team team, Member member) {
+    public MemberList(Team team, Member member, Role role) {
         this.team = team;
         this.member = member;
+        this.role = role;
     }
 }

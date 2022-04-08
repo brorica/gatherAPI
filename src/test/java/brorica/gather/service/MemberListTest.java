@@ -2,6 +2,7 @@ package brorica.gather.service;
 
 import brorica.gather.domain.Member;
 import brorica.gather.domain.MemberList;
+import brorica.gather.domain.Role;
 import brorica.gather.domain.Team;
 import brorica.gather.repository.MemberListRepository;
 import brorica.gather.repository.MemberRepository;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -34,7 +36,7 @@ public class MemberListTest {
         // when
         memberRepository.save(member);
         teamRepository.save(team);
-        team.addMember(member);
+        team.addMember(member, Role.GENERAL);
         List<MemberList> members = memberListRepository.findByTeamId(team.getId());
         MemberList findMember = members.stream()
             .filter(id -> id.getMember().getId().equals(member.getId()))
@@ -46,6 +48,7 @@ public class MemberListTest {
     }
 
     @Test
+    @Rollback(value = false)
     public void 모임_내에서_특정_구성원_찾기() {
         // given
         Member member1 = new Member("name1", "email1", "introduce");
@@ -60,9 +63,9 @@ public class MemberListTest {
         memberRepository.save(member3);
         teamRepository.save(team1);
         teamRepository.save(team2);
-        team1.addMember(member1);
-        team1.addMember(member3);
-        team2.addMember(member2);
+        team1.addMember(member1, Role.GENERAL);
+        team1.addMember(member3, Role.GENERAL);
+        team2.addMember(member2, Role.GENERAL);
 
         List<MemberList> members = memberListRepository.findByTeamId(team1.getId());
         MemberList findMember = members.stream()
@@ -71,6 +74,6 @@ public class MemberListTest {
             .get();
 
         // then
-        Assertions.assertEquals(member1.getId(), findMember.getMember().getId());
+        Assertions.assertEquals(member3.getId(), findMember.getMember().getId());
     }
 }
