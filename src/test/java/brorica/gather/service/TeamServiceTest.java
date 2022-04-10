@@ -1,10 +1,7 @@
 package brorica.gather.service;
 
-import brorica.gather.domain.Member;
-import brorica.gather.domain.MemberList;
 import brorica.gather.domain.Team;
 import brorica.gather.repository.TeamRepository;
-import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,19 +45,6 @@ class TeamServiceTest {
         Assertions.assertThrows(IllegalStateException.class, () -> {
             teamService.save(team2);
         });
-    }
-
-    @Test
-    public void 소개문일치확인() {
-        // given
-        Team team = createTeam("team1");
-
-        // when
-        teamService.save(team);
-        Team findTeam = teamRepository.findOne(team.getId());
-
-        // then
-        assertEquals(team.getIntroduce(), findTeam.getIntroduce());
     }
 
     public Team createTeam(String name) {
