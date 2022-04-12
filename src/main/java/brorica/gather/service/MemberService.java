@@ -2,11 +2,10 @@ package brorica.gather.service;
 
 import brorica.gather.domain.Member;
 import brorica.gather.repository.MemberRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -21,6 +20,15 @@ public class MemberService {
         validateDuplicateMemberEmail(member);
         memberRepository.save(member);
         return member.getId();
+    }
+
+    @Transactional(readOnly = false)
+    public void remove(Member member) {
+        memberRepository.remove(member);
+    }
+
+    public Member findMember(Long id) {
+        return memberRepository.findById(id);
     }
 
     public void validateDuplicateMemberName(Member member) {

@@ -1,14 +1,18 @@
 package brorica.gather.domain;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -28,6 +32,8 @@ public class Member extends EntityDate {
     @Column(nullable = false, unique = true)
     private String email;
 
+    private String password;
+
     @Column(name = "member_introduce")
     private String introduce;
 
@@ -36,12 +42,16 @@ public class Member extends EntityDate {
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
-    private Set<MemberList> belongs = new HashSet<>();
+    private final Set<MemberList> belongs = new HashSet<>();
 
-
-    public Member(String name, String email, String introduce) {
+    public Member(String name, String email, String password, String introduce) {
         this.name = name;
         this.email = email;
+        this.password = password;
+        this.introduce = introduce;
+    }
+
+    public void setIntroduce(String introduce) {
         this.introduce = introduce;
     }
 }

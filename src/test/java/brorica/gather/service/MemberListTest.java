@@ -85,7 +85,7 @@ public class MemberListTest {
     }
 
     public Member createMember(String name, String email) {
-        return new Member(name, email, "introduce");
+        return new Member(name, email, "password", "introduce");
     }
 
     public Team createTeam(String name) {

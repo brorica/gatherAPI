@@ -1,11 +1,10 @@
 package brorica.gather.repository;
 
 import brorica.gather.domain.Member;
+import java.util.List;
+import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-
-import javax.persistence.EntityManager;
-import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
@@ -15,6 +14,10 @@ public class MemberRepository {
 
     public void save(Member member) {
         em.persist(member);
+    }
+
+    public void remove(Member member) {
+        em.remove(member);
     }
 
     public Member findById(Long id) {
