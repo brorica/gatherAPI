@@ -4,24 +4,36 @@ import brorica.gather.domain.Member;
 import brorica.gather.domain.MemberList;
 import brorica.gather.domain.Role;
 import brorica.gather.domain.Team;
-import java.util.Set;
+import brorica.gather.repository.MemberRepository;
+import brorica.gather.repository.TeamRepository;
+import java.util.List;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
-@Transactional
 public class MemberListTest {
 
     @Autowired
     MemberService memberService;
     @Autowired
+    MemberRepository memberRepository;
+    @Autowired
     TeamService teamService;
+    @Autowired
+    TeamRepository teamRepository;
+
+    @AfterEach
+    void deleteAll() {
+        memberRepository.deleteAll();
+        teamRepository.deleteAll();
+    }
+
 
     @Test
-    public void 구성원추가() {
+    void 구성원추가() {
         // given
         Member member = createMember("member1", "email1");
         Team team = createTeam("team1");
@@ -31,7 +43,7 @@ public class MemberListTest {
         teamService.save(team);
 
         team.addMember(member);
-        Set<MemberList> members = team.getMembers();
+        List<MemberList> members = team.getMembers();
         MemberList findMember = members.stream()
             .filter(list -> list.getMember().getId().equals(member.getId()))
             .findAny()
@@ -42,7 +54,7 @@ public class MemberListTest {
     }
 
     @Test
-    public void 가입한_모임개수조회() {
+    void 가입한_모임개수조회() {
         // given
         Member member1 = createMember("member1", "email1");
         Team team1 = createTeam("team1");
@@ -56,14 +68,14 @@ public class MemberListTest {
         team1.addMember(member1);
         team2.addMember(member1);
 
-        Set<MemberList> belongs = member1.getBelongs();
+        List<MemberList> belongs = member1.getBelongs();
 
         // then
         Assertions.assertEquals(2, belongs.size());
     }
 
     @Test
-    public void 매니저등급확인() {
+    void 매니저등급확인() {
         // given
         Member member = createMember("member1", "email1");
         Team team = createTeam("team1");
@@ -74,7 +86,7 @@ public class MemberListTest {
 
         team.memberCreateTeam(member);
 
-        Set<MemberList> members = team.getMembers();
+        List<MemberList> members = team.getMembers();
         MemberList findMember = members.stream()
             .filter(list -> list.getMember().getId().equals(member.getId()))
             .findAny()
@@ -90,6 +102,6 @@ public class MemberListTest {
 
     public Team createTeam(String name) {
         String introduce = "test introduce";
-        return new Team(name, introduce.getBytes());
+        return new Team(name, introduce);
     }
 }

@@ -1,14 +1,20 @@
 package brorica.gather.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -25,17 +31,21 @@ public class Team extends EntityDate {
     @Column(name = "team_name", nullable = false, unique = true)
     private String name;
 
-    @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "team_introduce")
-    private byte[] introduce;
+    private String introduce;
 
     @OneToMany(
         mappedBy = "team",
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
-    private Set<MemberList> members = new HashSet<>();
+    private final List<MemberList> members = new ArrayList<>();
+
+    public Team(String name, String introduce) {
+        this.name = name;
+        this.introduce = introduce;
+    }
 
     // 모임을 개설하는 멤버는 MANAGER 등급
     public void memberCreateTeam(Member member) {
@@ -51,8 +61,7 @@ public class Team extends EntityDate {
         member.getBelongs().add(memberList);
     }
 
-    public Team(String name, byte[] introduce) {
-        this.name = name;
+    public void setIntroduce(String introduce) {
         this.introduce = introduce;
     }
 }

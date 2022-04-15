@@ -1,7 +1,7 @@
 package brorica.gather.domain;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,28 +21,23 @@ import lombok.NoArgsConstructor;
 @Table(name = "member")
 public class Member extends EntityDate {
 
-    @Id
-    @GeneratedValue
-    @Column(name = "member_id")
-    private Long id;
-
-    @Column(name = "member_name", nullable = false, unique = true)
-    private String name;
-
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    private String password;
-
-    @Column(name = "member_introduce")
-    private String introduce;
-
     @OneToMany(
         mappedBy = "member",
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
-    private final Set<MemberList> belongs = new HashSet<>();
+    private final List<MemberList> belongs = new ArrayList<>();
+    @Id
+    @GeneratedValue
+    @Column(name = "member_id")
+    private Long id;
+    @Column(name = "member_name", nullable = false, unique = true)
+    private String name;
+    @Column(nullable = false, unique = true)
+    private String email;
+    private String password;
+    @Column(name = "member_introduce")
+    private String introduce;
 
     public Member(String name, String email, String password, String introduce) {
         this.name = name;

@@ -1,17 +1,18 @@
 package brorica.gather.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import brorica.gather.domain.Member;
 import brorica.gather.repository.MemberRepository;
+import java.util.Optional;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
-@Transactional
+@Transactional(propagation = Propagation.NOT_SUPPORTED)
 class MemberServiceTest {
 
     @Autowired
@@ -20,14 +21,20 @@ class MemberServiceTest {
     @Autowired
     MemberRepository memberRepository;
 
+    @AfterEach
+    void deleteAll() {
+        memberRepository.deleteAll();
+    }
+
     @Test
     public void 회원가입() {
         // given
         Member member = createMember("member1", "email1");
         // when
-        Long saveId = memberService.save(member);
+        memberService.save(member);
         // then
-        assertEquals(member, memberRepository.findById(saveId));
+        Member findMember = memberService.findMember(member.getId()).get();
+        Assertions.assertEquals(member.getId(), findMember.getId());
     }
 
     @Test
@@ -36,12 +43,12 @@ class MemberServiceTest {
         Member member = createMember("member1", "email1");
 
         // when
-        Long saveId = memberService.save(member);
+        memberService.save(member);
         memberService.remove(member);
-        Member findMember = memberService.findMember(saveId);
 
         // then
-        Assertions.assertEquals(findMember, null);
+        Optional<Member> findMember = memberService.findMember(member.getId());
+        Assertions.assertEquals(findMember.isEmpty(), true);
     }
 
     @Test
@@ -80,10 +87,10 @@ class MemberServiceTest {
         Member member = createMember("member1", "email1");
 
         // when
-        Long saveId = memberService.save(member);
-        Member findMember = memberService.findMember(saveId);
+        memberService.save(member);
 
         // then
+        Member findMember = memberService.findMember(member.getName()).get();
         Assertions.assertEquals(member.getPassword(), findMember.getPassword());
     }
 
@@ -93,10 +100,10 @@ class MemberServiceTest {
         Member member = createMember("member1", "email1");
 
         // when
-        Long saveId = memberService.save(member);
-        Member findMember = memberService.findMember(saveId);
+        memberService.save(member);
 
         // then
+        Member findMember = memberService.findMember(member.getId()).get();
         Assertions.assertNotEquals("different password", findMember.getPassword());
     }
 
@@ -107,11 +114,12 @@ class MemberServiceTest {
         String changeIntroduce = "change Introduce";
 
         // when
-        Long saveId = memberService.save(member);
+        memberService.save(member);
         member.setIntroduce(changeIntroduce);
-        Member findMember = memberService.findMember(saveId);
+        memberService.changeIntroduce(member);
 
         // then
+        Member findMember = memberService.findMember(member.getId()).get();
         Assertions.assertEquals(changeIntroduce, findMember.getIntroduce());
     }
 

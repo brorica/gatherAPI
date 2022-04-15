@@ -2,7 +2,7 @@ package brorica.gather.service;
 
 import brorica.gather.domain.Member;
 import brorica.gather.repository.MemberRepository;
-import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,30 +18,44 @@ public class MemberService {
     public Long save(Member member) {
         validateDuplicateMemberName(member);
         validateDuplicateMemberEmail(member);
-        memberRepository.save(member);
-        return member.getId();
+        return memberRepository.save(member).getId();
     }
 
     @Transactional(readOnly = false)
     public void remove(Member member) {
-        memberRepository.remove(member);
+        isMemberExist(member);
+        memberRepository.delete(member);
     }
 
-    public Member findMember(Long id) {
+    @Transactional(readOnly = false)
+    public void changeIntroduce(Member member) {
+        isMemberExist(member);
+        memberRepository.save(member);
+    }
+
+    public Optional<Member> findMember(Long id) {
         return memberRepository.findById(id);
     }
 
-    public void validateDuplicateMemberName(Member member) {
-        List<Member> findMembers = memberRepository.findByName(member.getName());
-        if (!findMembers.isEmpty()) {
+    public Optional<Member> findMember(String name) {
+        return memberRepository.findByName(name);
+    }
+
+    private void validateDuplicateMemberName(Member member) {
+        if (memberRepository.findByName(member.getName()).isPresent()) {
             throw new IllegalStateException("중복된 이름입니다.");
         }
     }
 
-    public void validateDuplicateMemberEmail(Member member) {
-        List<Member> findMembers = memberRepository.findByEmail(member.getEmail());
-        if (!findMembers.isEmpty()) {
+    private void validateDuplicateMemberEmail(Member member) {
+        if (memberRepository.findByEmail(member.getEmail()).isPresent()) {
             throw new IllegalStateException("중복된 이메일입니다.");
+        }
+    }
+
+    private void isMemberExist(Member member) {
+        if (memberRepository.findById(member.getId()).isEmpty()) {
+            throw new IllegalStateException("존재하지 않는 멤버입니다.");
         }
     }
 }

@@ -1,38 +1,15 @@
 package brorica.gather.repository;
 
 import brorica.gather.domain.Member;
-import java.util.List;
-import javax.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-@RequiredArgsConstructor
-public class MemberRepository {
+public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    private final EntityManager em;
+    Optional<Member> findByName(String name);
 
-    public void save(Member member) {
-        em.persist(member);
-    }
+    Optional<Member> findByEmail(String email);
 
-    public void remove(Member member) {
-        em.remove(member);
-    }
+    Optional<Member> findByPassword(String password);
 
-    public Member findById(Long id) {
-        return em.find(Member.class, id);
-    }
-
-    public List<Member> findByName(String name) {
-        return em.createQuery("select m from Member m where m.name = :name", Member.class)
-            .setParameter("name", name)
-            .getResultList();
-    }
-
-    public List<Member> findByEmail(String email) {
-        return em.createQuery("select m from Member m where m.email = :email", Member.class)
-            .setParameter("email", email)
-            .getResultList();
-    }
 }
