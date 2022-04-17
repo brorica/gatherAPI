@@ -1,11 +1,10 @@
 package brorica.gather.domain;
 
+import java.time.LocalDateTime;
+import javax.persistence.MappedSuperclass;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import javax.persistence.MappedSuperclass;
-import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Getter

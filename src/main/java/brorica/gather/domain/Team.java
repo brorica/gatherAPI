@@ -1,14 +1,20 @@
 package brorica.gather.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -17,42 +23,33 @@ import java.util.Set;
 @Table(name = "team")
 public class Team extends EntityDate {
 
-    @Id
-    @GeneratedValue
-    @Column(name = "team_id")
-    private Long id;
-
-    @Column(name = "team_name", nullable = false, unique = true)
-    private String name;
-
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(name = "team_introduce")
-    private byte[] introduce;
-
     @OneToMany(
         mappedBy = "team",
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
-    private Set<MemberList> members = new HashSet<>();
+    private final List<TeamMember> members = new ArrayList<>();
+    @Id
+    @GeneratedValue
+    @Column(name = "team_id")
+    private Long id;
+    @Column(name = "team_name", nullable = false, unique = true)
+    private String name;
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "team_introduce")
+    private String introduce;
 
-    // 모임을 개설하는 멤버는 MANAGER 등급
-    public void memberCreateTeam(Member member) {
-        MemberList memberList = new MemberList(this, member, Role.MANAGER);
-        members.add(memberList);
-        member.getBelongs().add(memberList);
-    }
-
-    // 모임에 처음 가입할 땐 일반 등급
-    public void addMember(Member member) {
-        MemberList memberList = new MemberList(this, member, Role.GENERAL);
-        members.add(memberList);
-        member.getBelongs().add(memberList);
-    }
-
-    public Team(String name, byte[] introduce) {
+    public Team(String name, String introduce) {
         this.name = name;
+        this.introduce = introduce;
+    }
+
+    public void addMember(Member member, Role role) {
+        TeamMember teamMember = new TeamMember(this, member, role);
+        members.add(teamMember);
+    }
+
+    public void setIntroduce(String introduce) {
         this.introduce = introduce;
     }
 }

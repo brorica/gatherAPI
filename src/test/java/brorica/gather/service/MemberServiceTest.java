@@ -2,16 +2,17 @@ package brorica.gather.service;
 
 import brorica.gather.domain.Member;
 import brorica.gather.repository.MemberRepository;
+import java.util.Optional;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
-@Transactional
+@Transactional(propagation = Propagation.NOT_SUPPORTED)
 class MemberServiceTest {
 
     @Autowired
@@ -20,14 +21,34 @@ class MemberServiceTest {
     @Autowired
     MemberRepository memberRepository;
 
+    @AfterEach
+    void deleteAll() {
+        memberRepository.deleteAll();
+    }
+
     @Test
     public void 회원가입() {
         // given
         Member member = createMember("member1", "email1");
         // when
-        Long saveId = memberService.save(member);
+        memberService.save(member);
         // then
-        assertEquals(member, memberRepository.findById(saveId));
+        Member findMember = memberService.findMember(member.getId()).get();
+        Assertions.assertEquals(member.getId(), findMember.getId());
+    }
+
+    @Test
+    public void 회원탈퇴() {
+        // given
+        Member member = createMember("member1", "email1");
+
+        // when
+        memberService.save(member);
+        memberService.remove(member);
+
+        // then
+        Optional<Member> findMember = memberService.findMember(member.getId());
+        Assertions.assertEquals(findMember.isEmpty(), true);
     }
 
     @Test
@@ -60,7 +81,49 @@ class MemberServiceTest {
         });
     }
 
+    @Test
+    public void 패스워드일치() {
+        // given
+        Member member = createMember("member1", "email1");
+
+        // when
+        memberService.save(member);
+
+        // then
+        Member findMember = memberService.findMember(member.getName()).get();
+        Assertions.assertEquals(member.getPassword(), findMember.getPassword());
+    }
+
+    @Test
+    public void 패스워드불일치() {
+        // given
+        Member member = createMember("member1", "email1");
+
+        // when
+        memberService.save(member);
+
+        // then
+        Member findMember = memberService.findMember(member.getId()).get();
+        Assertions.assertNotEquals("different password", findMember.getPassword());
+    }
+
+    @Test
+    public void 자기소개변경() {
+        // given
+        Member member = createMember("member1", "email1");
+        String changeIntroduce = "change Introduce";
+
+        // when
+        memberService.save(member);
+        member.setIntroduce(changeIntroduce);
+        memberService.changeIntroduce(member);
+
+        // then
+        Member findMember = memberService.findMember(member.getId()).get();
+        Assertions.assertEquals(changeIntroduce, findMember.getIntroduce());
+    }
+
     public Member createMember(String name, String email) {
-        return new Member(name, email, "introduce");
+        return new Member(name, email, "password", "introduce");
     }
 }
