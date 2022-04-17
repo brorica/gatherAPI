@@ -26,7 +26,7 @@ public class Member extends EntityDate {
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
-    private final List<MemberList> belongs = new ArrayList<>();
+    private final List<TeamMember> belongs = new ArrayList<>();
     @Id
     @GeneratedValue
     @Column(name = "member_id")

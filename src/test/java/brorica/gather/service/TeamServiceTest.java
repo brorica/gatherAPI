@@ -1,10 +1,13 @@
 package brorica.gather.service;
 
+import brorica.gather.domain.Member;
 import brorica.gather.domain.Team;
+import brorica.gather.repository.MemberRepository;
 import brorica.gather.repository.TeamRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,9 +21,27 @@ public class TeamServiceTest {
     @Autowired
     TeamRepository teamRepository;
 
+    @Autowired
+    MemberService memberService;
+
+    @Autowired
+    MemberRepository memberRepository;
+
+    Member member1, member2;
+
+    @BeforeEach
+    void createTestMembers() {
+        member1 = new Member("name1", "email1", "password", "introduce");
+        member2 = new Member("name2", "email2", "password", "introduce");
+
+        memberService.save(member1);
+        memberService.save(member2);
+    }
+
     @AfterEach
     void deleteAll() {
         teamRepository.deleteAll();
+        memberRepository.deleteAll();
     }
 
     @Test
@@ -29,7 +50,7 @@ public class TeamServiceTest {
         Team team = createTeam("team");
 
         // when
-        teamService.save(team);
+        teamService.save(team, member1);
 
         // then
         Team foundTeam = teamService.findTeam(team.getId()).orElseThrow(IllegalStateException::new);
@@ -43,11 +64,11 @@ public class TeamServiceTest {
         Team team2 = createTeam("team1");
 
         // when
-        teamService.save(team1);
+        teamService.save(team1, member1);
 
         // then
         Assertions.assertThrows(IllegalStateException.class, () -> {
-            teamService.save(team2);
+            teamService.save(team2, member1);
         });
     }
 
@@ -57,7 +78,7 @@ public class TeamServiceTest {
         Team team = createTeam("team");
 
         // when
-        teamService.save(team);
+        teamService.save(team, member1);
         teamService.disband(team);
 
         // then
@@ -71,7 +92,7 @@ public class TeamServiceTest {
         Team team = createTeam("team");
 
         // when
-        teamService.save(team);
+        teamService.save(team, member1);
 
         // then
         Team findTeam = teamService.findTeam(team.getName()).get();
@@ -85,7 +106,7 @@ public class TeamServiceTest {
         String changeIntroduce = "change Introduce";
 
         // when
-        teamService.save(team);
+        teamService.save(team, member1);
         team.setIntroduce(changeIntroduce);
         teamService.changeIntroduce(team);
 
