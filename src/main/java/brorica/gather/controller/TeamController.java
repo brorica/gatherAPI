@@ -14,6 +14,6 @@ public class TeamController {
 
     @PostMapping("/api/team/create")
     public ResponseEntity<?> createTeam() {
-
+        return null;
     }
 }
