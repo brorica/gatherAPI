@@ -18,9 +18,6 @@ public class MemberController {
 
     @PostMapping("/api/join")
     public ResponseEntity<MemberResponse> createMember(@RequestBody MemberRequest req) {
-        if (memberService.findMemberByEmail(req.getEmail()).isPresent()) {
-            return ResponseEntity.badRequest().build();
-        }
         Member member = req.toMember();
         memberService.save(member);
         return ResponseEntity.ok()
