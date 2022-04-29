@@ -1,4 +1,4 @@
-package brorica.gather.dto;
+package brorica.gather.dto.member;
 
 import brorica.gather.domain.Member;
 import lombok.Getter;

@@ -1,13 +1,13 @@
-package brorica.gather.dto;
+package brorica.gather.dto.member;
 
 import brorica.gather.domain.Member;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
+@Data
+@NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
 public class MemberRequest {
 
     private String name;
