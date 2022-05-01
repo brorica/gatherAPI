@@ -26,12 +26,16 @@ public class Team extends EntityDate {
         orphanRemoval = true
     )
     private final List<TeamMember> members = new ArrayList<>();
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "team_id")
+
     private Long id;
     @Column(name = "team_name", nullable = false, unique = true)
+
     private String name;
+
     @Column(name = "team_introduce")
     private String introduce;
 
