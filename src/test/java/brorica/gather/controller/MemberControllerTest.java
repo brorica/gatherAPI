@@ -1,7 +1,6 @@
 package brorica.gather.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -14,10 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @SpringBootTest
@@ -86,7 +81,7 @@ class MemberControllerTest {
         mockMvc.perform(post("/api/member/info")
             .contentType(MediaType.APPLICATION_JSON)
             .content(json))
-            .andExpect(content().json("{\"name\":\"name1\",\"email\":\"email1\",\"introduce\":\"\"}"));
-
+            .andExpect(
+                content().json("{\"name\":\"name1\",\"email\":\"email1\",\"introduce\":\"\"}"));
     }
 }
