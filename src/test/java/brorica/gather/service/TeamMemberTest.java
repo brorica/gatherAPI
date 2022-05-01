@@ -1,12 +1,13 @@
 package brorica.gather.service;
 
 import brorica.gather.domain.Member;
-import brorica.gather.domain.Role;
 import brorica.gather.domain.Team;
 import brorica.gather.domain.TeamMember;
 import brorica.gather.repository.MemberRepository;
+import brorica.gather.repository.TeamMemberQueryDSL;
+import brorica.gather.repository.TeamMemberRepository;
 import brorica.gather.repository.TeamRepository;
-import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -17,103 +18,52 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class TeamMemberTest {
 
     @Autowired
-    MemberService memberService;
-    @Autowired
     MemberRepository memberRepository;
     @Autowired
-    TeamService teamService;
-    @Autowired
     TeamRepository teamRepository;
+    @Autowired
+    TeamMemberService teamMemberService;
+    @Autowired
+    TeamMemberRepository teamMemberRepository;
+    @Autowired
+    TeamMemberQueryDSL teamMemberQueryDSL;
 
     @AfterEach
     void deleteAll() {
-        memberRepository.deleteAll();
-        teamRepository.deleteAll();
+         teamMemberRepository.deleteAll();
     }
 
-
     @Test
-    void 모임멤버추가() {
+    public void 모임생성자는모임장() {
         // given
-        Member member = createMember("member1", "email1");
-        Team team = createTeam("team1");
+        Member member = createMember("manager", "manager@email");
+        Team team = createTeam("team");
 
         // when
-        memberService.save(member);
-        teamService.save(team, member);
-
-        List<TeamMember> members = team.getMembers();
-        TeamMember findMember = members.stream()
-            .filter(list -> list.getMember().getId().equals(member.getId()))
-            .findAny()
-            .get();
+        memberRepository.save(member);
+        teamRepository.save(team);
+        teamMemberService.FirstMember(team, member);
 
         // then
-        Assertions.assertEquals(member.getId(), findMember.getMember().getId());
+        Optional<TeamMember> exist = teamMemberQueryDSL.exist(team.getId(), member.getId());
+        Assertions.assertEquals(exist.isPresent(), true);
     }
 
     @Test
-    void 매니저등급확인() {
+    public void 중복가입방지() {
         // given
-        Member member = createMember("member1", "email1");
-        Team team = createTeam("team1");
+        Member member = createMember("member", "member");
+        Team team = createTeam("team");
 
         // when
-        memberService.save(member);
-        teamService.save(team, member);
-
-        List<TeamMember> members = team.getMembers();
-        TeamMember findMember = members.stream()
-            .filter(list -> list.getMember().getId().equals(member.getId()))
-            .findAny()
-            .get();
-
-        // then
-        Assertions.assertEquals(Role.MANAGER, findMember.getRole());
-    }
-
-    @Test
-    void 일반등급확인() {
-        // given
-        Member member1 = createMember("member1", "email1");
-        Member member2 = createMember("member2", "email2");
-        Team team = createTeam("team1");
-
-        // when
-        memberService.save(member1);
-        memberService.save(member2);
-        teamService.save(team, member1);
-        teamService.join(team, member2);
-
-        List<TeamMember> members = team.getMembers();
-        TeamMember findMember = members.stream()
-            .filter(list -> list.getMember().getId().equals(member2.getId()))
-            .findAny()
-            .get();
-
-        // then
-        Assertions.assertEquals(Role.GENERAL, findMember.getRole());
-    }
-
-    @Test
-    void 모임멤버탈퇴() {
-        // given
-        Member member1 = createMember("member1", "email1");
-        Member member2 = createMember("member2", "email2");
-        Team team = createTeam("team1");
-
-        // when
-        memberService.save(member1);
-        memberService.save(member2);
-        teamService.save(team, member1);
-        teamService.join(team, member2);
-        teamService.secession(team, member2);
+        memberRepository.save(member);
+        teamRepository.save(team);
+        teamMemberService.FirstMember(team, member);
 
         // then
         Assertions.assertThrows(IllegalStateException.class, () -> {
-            teamService.findTeamMember(team, member2);
+            teamMemberService.joinMember(team, member);
         });
-
     }
 
     public Member createMember(String name, String email) {

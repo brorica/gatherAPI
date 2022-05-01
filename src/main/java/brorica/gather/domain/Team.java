@@ -45,11 +45,6 @@ public class Team extends EntityDate {
         this.introduce = introduce;
     }
 
-    public void addMember(Member member, Role role) {
-        TeamMember teamMember = new TeamMember(this, member, role);
-        members.add(teamMember);
-    }
-
     public void setIntroduce(String introduce) {
         this.introduce = introduce;
     }

@@ -21,27 +21,9 @@ public class TeamServiceTest {
     @Autowired
     TeamRepository teamRepository;
 
-    @Autowired
-    MemberService memberService;
-
-    @Autowired
-    MemberRepository memberRepository;
-
-    Member member1, member2;
-
-    @BeforeEach
-    void createTestMembers() {
-        member1 = new Member("name1", "email1", "password", "introduce");
-        member2 = new Member("name2", "email2", "password", "introduce");
-
-        memberService.save(member1);
-        memberService.save(member2);
-    }
-
     @AfterEach
     void deleteAll() {
         teamRepository.deleteAll();
-        memberRepository.deleteAll();
     }
 
     @Test
@@ -50,7 +32,7 @@ public class TeamServiceTest {
         Team team = createTeam("team");
 
         // when
-        teamService.save(team, member1);
+        teamService.save(team);
 
         // then
         Team foundTeam = teamService.findTeam(team.getId()).orElseThrow(IllegalStateException::new);
@@ -64,11 +46,11 @@ public class TeamServiceTest {
         Team team2 = createTeam("team1");
 
         // when
-        teamService.save(team1, member1);
+        teamService.save(team1);
 
         // then
         Assertions.assertThrows(IllegalStateException.class, () -> {
-            teamService.save(team2, member1);
+            teamService.save(team2);
         });
     }
 
@@ -78,7 +60,7 @@ public class TeamServiceTest {
         Team team = createTeam("team");
 
         // when
-        teamService.save(team, member1);
+        teamService.save(team);
         teamService.disband(team);
 
         // then
@@ -92,7 +74,7 @@ public class TeamServiceTest {
         Team team = createTeam("team");
 
         // when
-        teamService.save(team, member1);
+        teamService.save(team);
 
         // then
         Team findTeam = teamService.findTeam(team.getName()).get();
@@ -106,7 +88,7 @@ public class TeamServiceTest {
         String changeIntroduce = "change Introduce";
 
         // when
-        teamService.save(team, member1);
+        teamService.save(team);
         team.setIntroduce(changeIntroduce);
         teamService.changeIntroduce(team);
 

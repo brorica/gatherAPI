@@ -20,15 +20,13 @@ public class TeamService {
     private final TeamMemberRepository teamMemberRepository;
 
     @Transactional(readOnly = false)
-    public Long save(Team team, Member member) {
+    public Long save(Team team) {
         validateDuplicateTeamName(team);
-        team.addMember(member, Role.MANAGER);
         return teamRepository.save(team).getId();
     }
 
     @Transactional(readOnly = false)
     public void join(Team team, Member member) {
-        team.addMember(member, Role.GENERAL);
         teamRepository.save(team);
     }
 
