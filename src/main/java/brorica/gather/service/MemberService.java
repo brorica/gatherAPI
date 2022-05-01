@@ -41,6 +41,13 @@ public class MemberService {
         return memberRepository.findByName(name);
     }
 
+    /**
+     * 위의 name 겁색과 겹쳐서 만든 임시 메소드 로그인 controller에 대한 구현이 끝나면 삭제
+     */
+    public Optional<Member> findMemberByEmail(String email) {
+        return memberRepository.findByEmail(email);
+    }
+
     private void validateDuplicateMemberName(Member member) {
         if (memberRepository.findByName(member.getName()).isPresent()) {
             throw new IllegalStateException("중복된 이름입니다.");
