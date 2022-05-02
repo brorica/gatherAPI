@@ -23,29 +23,38 @@ public class MemberService {
 
     @Transactional(readOnly = false)
     public void remove(Member member) {
-        isMemberExist(member);
+        findMember(member.getId());
         memberRepository.delete(member);
     }
 
     @Transactional(readOnly = false)
-    public void changeIntroduce(Member member) {
-        isMemberExist(member);
-        memberRepository.save(member);
+    public void changeIntroduce(Member member, String newIntroduce) {
+        Member findMember = findMember(member.getId());
+        findMember.setIntroduce(newIntroduce);
     }
 
-    public Optional<Member> findMember(Long id) {
-        return memberRepository.findById(id);
+    public Member findMember(Long id) {
+        Optional<Member> findMember = memberRepository.findById(id);
+        if (findMember.isEmpty()) {
+            throw new IllegalStateException("존재하지 않는 멤버입니다.");
+        }
+        return findMember.get();
     }
 
-    public Optional<Member> findMember(String name) {
-        return memberRepository.findByName(name);
+    public Member findMember(String name) {
+        Optional<Member> findMember = memberRepository.findByName(name);
+        if (findMember.isEmpty()) {
+            throw new IllegalStateException("존재하지 않는 멤버입니다.");
+        }
+        return findMember.get();
     }
 
-    /**
-     * 위의 name 겁색과 겹쳐서 만든 임시 메소드 로그인 controller에 대한 구현이 끝나면 삭제
-     */
-    public Optional<Member> findMemberByEmail(String email) {
-        return memberRepository.findByEmail(email);
+    public Member findMemberByEmail(String email) {
+        Optional<Member> findMember = memberRepository.findByEmail(email);
+        if (findMember.isEmpty()) {
+            throw new IllegalStateException("존재하지 않는 멤버입니다.");
+        }
+        return findMember.get();
     }
 
     private void validateDuplicateMemberName(Member member) {
@@ -57,12 +66,6 @@ public class MemberService {
     private void validateDuplicateMemberEmail(Member member) {
         if (memberRepository.findByEmail(member.getEmail()).isPresent()) {
             throw new IllegalStateException("중복된 이메일입니다.");
-        }
-    }
-
-    private void isMemberExist(Member member) {
-        if (memberRepository.findById(member.getId()).isEmpty()) {
-            throw new IllegalStateException("존재하지 않는 멤버입니다.");
         }
     }
 }

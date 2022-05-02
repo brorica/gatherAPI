@@ -2,7 +2,6 @@ package brorica.gather.service;
 
 import brorica.gather.domain.Member;
 import brorica.gather.repository.MemberRepository;
-import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -33,7 +32,7 @@ class MemberServiceTest {
         // when
         memberService.save(member);
         // then
-        Member findMember = memberService.findMember(member.getId()).get();
+        Member findMember = memberService.findMember(member.getId());
         Assertions.assertEquals(member.getId(), findMember.getId());
     }
 
@@ -47,8 +46,9 @@ class MemberServiceTest {
         memberService.remove(member);
 
         // then
-        Optional<Member> findMember = memberService.findMember(member.getId());
-        Assertions.assertEquals(findMember.isEmpty(), true);
+        Assertions.assertThrows(IllegalStateException.class, () -> {
+            memberService.findMember(member.getId());
+        });
     }
 
     @Test
@@ -90,7 +90,7 @@ class MemberServiceTest {
         memberService.save(member);
 
         // then
-        Member findMember = memberService.findMember(member.getName()).get();
+        Member findMember = memberService.findMember(member.getName());
         Assertions.assertEquals(member.getPassword(), findMember.getPassword());
     }
 
@@ -103,7 +103,7 @@ class MemberServiceTest {
         memberService.save(member);
 
         // then
-        Member findMember = memberService.findMember(member.getId()).get();
+        Member findMember = memberService.findMember(member.getId());
         Assertions.assertNotEquals("different password", findMember.getPassword());
     }
 
@@ -115,11 +115,10 @@ class MemberServiceTest {
 
         // when
         memberService.save(member);
-        member.setIntroduce(changeIntroduce);
-        memberService.changeIntroduce(member);
+        memberService.changeIntroduce(member, changeIntroduce);
 
         // then
-        Member findMember = memberService.findMember(member.getId()).get();
+        Member findMember = memberService.findMember(member.getId());
         Assertions.assertEquals(changeIntroduce, findMember.getIntroduce());
     }
 
