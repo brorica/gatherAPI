@@ -1,10 +1,29 @@
 package brorica.gather.repository;
 
 import brorica.gather.domain.Team;
-import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
-public interface TeamRepository extends JpaRepository<Team, Long> {
+import javax.persistence.EntityManager;
+import java.util.List;
 
-    Optional<Team> findByName(String name);
+@Repository
+@RequiredArgsConstructor
+public class TeamRepository {
+
+    private final EntityManager em;
+
+    public void save(Team team) {
+        em.persist(team);
+    }
+
+    public Team findOne(Long id) {
+        return em.find(Team.class, id);
+    }
+
+    public List<Team> findByName(String name) {
+        return em.createQuery("select t from Team as t where t.name = :name", Team.class)
+            .setParameter("name", name)
+            .getResultList();
+    }
 }
