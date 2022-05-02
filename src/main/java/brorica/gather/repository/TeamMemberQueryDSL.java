@@ -11,14 +11,14 @@ import org.springframework.stereotype.Repository;
 public class TeamMemberQueryDSL extends QuerydslRepositorySupport {
 
     private final JPAQueryFactory jpaQueryFactory;
-    private final QTeamMember teamMember;
+    private final QTeamMember teamMember; // 1)
 
     public TeamMemberQueryDSL(final JPAQueryFactory jpaQueryFactory) {
         super(TeamMember.class);
         this.jpaQueryFactory = jpaQueryFactory;
         this.teamMember = QTeamMember.teamMember;
     }
-
+    // 2)
     public Optional<TeamMember> exist(Long teamId, Long memberId) {
         TeamMember findTeamMember = jpaQueryFactory
             .selectFrom(teamMember)

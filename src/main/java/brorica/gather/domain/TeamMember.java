@@ -41,4 +41,8 @@ public class TeamMember extends EntityDate {
         this.member = member;
         this.role = role;
     }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 }

@@ -4,7 +4,6 @@ import brorica.gather.domain.Member;
 import brorica.gather.dto.member.MemberRequest;
 import brorica.gather.dto.member.MemberResponse;
 import brorica.gather.service.MemberService;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,11 +25,8 @@ public class MemberController {
 
     @PostMapping("/api/member/info")
     public ResponseEntity<MemberResponse> getMemberInfo(@RequestBody MemberRequest req) {
-        Optional<Member> member = memberService.findMemberByEmail(req.getEmail());
-        if (member.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
+        Member member = memberService.findMemberByEmail(req.getEmail());
         return ResponseEntity.ok()
-            .body(new MemberResponse(member.get()));
+            .body(new MemberResponse(member));
     }
 }
