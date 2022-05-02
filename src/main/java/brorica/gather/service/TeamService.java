@@ -2,10 +2,11 @@ package brorica.gather.service;
 
 import brorica.gather.domain.Team;
 import brorica.gather.repository.TeamRepository;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -17,40 +18,14 @@ public class TeamService {
     @Transactional(readOnly = false)
     public Long save(Team team) {
         validateDuplicateTeamName(team);
-        return teamRepository.save(team).getId();
+        teamRepository.save(team);
+        return team.getId();
     }
 
-    @Transactional(readOnly = false)
-    public void disband(Team team) {
-        findTeam(team.getId());
-        teamRepository.delete(team);
-    }
-
-    @Transactional(readOnly = false)
-    public void changeIntroduce(Team team, String newIntroduce) {
-        Team findTeam = findTeam(team.getId());
-        findTeam.setIntroduce(newIntroduce);
-    }
-
-    private void validateDuplicateTeamName(Team team) {
-        if (teamRepository.findByName(team.getName()).isPresent()) {
+    public void validateDuplicateTeamName(Team team) {
+        List<Team> findTeams = teamRepository.findByName(team.getName());
+        if (!findTeams.isEmpty()) {
             throw new IllegalStateException("중복된 모임명입니다.");
         }
-    }
-
-    public Team findTeam(Long teamId) {
-        Optional<Team> findTeam = teamRepository.findById(teamId);
-        if (findTeam.isEmpty()) {
-            throw new IllegalStateException("존재하지 않는 모임입니다.");
-        }
-        return findTeam.get();
-    }
-
-    public Team findTeam(String name) {
-        Optional<Team> findTeam = teamRepository.findByName(name);
-        if (findTeam.isEmpty()) {
-            throw new IllegalStateException("존재하지 않는 모임입니다.");
-        }
-        return findTeam.get();
     }
 }
