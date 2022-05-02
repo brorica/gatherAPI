@@ -1,58 +1,51 @@
 package brorica.gather.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Table(name = "team")
 public class Team extends EntityDate {
-
-    @Id
-    @GeneratedValue
-    @Column(name = "team_id")
-    private Long id;
-
-    @Column(name = "team_name", nullable = false, unique = true)
-    private String name;
-
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(name = "team_introduce")
-    private byte[] introduce;
 
     @OneToMany(
         mappedBy = "team",
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
-    private Set<MemberList> members = new HashSet<>();
+    private final List<TeamMember> members = new ArrayList<>();
 
-    // 모임을 개설하는 멤버는 MANAGER 등급
-    public void memberCreateTeam(Member member) {
-        MemberList memberList = new MemberList(this, member, Role.MANAGER);
-        members.add(memberList);
-        member.getBelongs().add(memberList);
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "team_id")
 
-    // 모임에 처음 가입할 땐 일반 등급
-    public void addMember(Member member) {
-        MemberList memberList = new MemberList(this, member, Role.GENERAL);
-        members.add(memberList);
-        member.getBelongs().add(memberList);
-    }
+    private Long id;
+    @Column(name = "team_name", nullable = false, unique = true)
 
-    public Team(String name, byte[] introduce) {
+    private String name;
+
+    @Column(name = "team_introduce")
+    private String introduce;
+
+    public Team(String name, String introduce) {
         this.name = name;
+        this.introduce = introduce;
+    }
+
+    public void setIntroduce(String introduce) {
         this.introduce = introduce;
     }
 }
