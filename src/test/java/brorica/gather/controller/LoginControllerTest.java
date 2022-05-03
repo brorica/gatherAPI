@@ -1,12 +1,13 @@
 package brorica.gather.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import brorica.gather.config.SessionConst;
+import brorica.gather.dto.member.LoginRequest;
 import brorica.gather.dto.member.MemberRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -19,7 +20,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class MemberControllerTest {
+class LoginControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -34,58 +35,59 @@ class MemberControllerTest {
     }
 
     @Test
-    public void 멤버가입성공() throws Exception {
+    public void 로그인성공() throws Exception {
         // given
         MemberRequest memberRequest = new MemberRequest("name", "email", "password");
-        String json = objectMapper.writeValueAsString(memberRequest);
+        String createJson = objectMapper.writeValueAsString(memberRequest);
+        LoginRequest loginRequest = new LoginRequest(memberRequest.getEmail(),
+            memberRequest.getPassword());
+        String loginJson = objectMapper.writeValueAsString(loginRequest);
 
-        // when, then
+        // when
         mockMvc.perform(post("/api/member/join")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(json))
+            .content(createJson));
+
+        // then
+        mockMvc.perform(post("/api/login")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(loginJson))
             .andExpect(status().isOk());
     }
 
     @Test
-    public void 이메일중복가입() throws Exception {
+    public void 로그인실패() throws Exception {
         // given
-        MemberRequest memberRequest1 = new MemberRequest("name1", "email1", "password1");
-        MemberRequest memberRequest2 = new MemberRequest("name2", "email1", "password1");
-
-        String json1 = objectMapper.writeValueAsString(memberRequest1);
-        String json2 = objectMapper.writeValueAsString(memberRequest2);
+        MemberRequest memberRequest = new MemberRequest("name", "email", "password");
+        String createJson = objectMapper.writeValueAsString(memberRequest);
+        LoginRequest loginRequest = new LoginRequest(memberRequest.getEmail(), "wrong password");
+        String loginJson = objectMapper.writeValueAsString(loginRequest);
 
         // when
         mockMvc.perform(post("/api/member/join")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(json1));
+            .content(createJson));
 
         // then
-        mockMvc.perform(post("/api/member/join")
+        mockMvc.perform(post("/api/login")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(json2))
+            .content(loginJson))
             .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void 회원정보조회() throws Exception {
+    public void 로그아웃() throws Exception {
         // given
-        MemberRequest memberRequest = new MemberRequest("name", "email", "password");
-        String json = objectMapper.writeValueAsString(memberRequest);
         MockHttpSession mockSession = new MockHttpSession();
         mockSession.setAttribute(SessionConst.LOGIN_MEMBER, "test");
 
         // when
-        mockMvc.perform(post("/api/member/join")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(json));
+        mockMvc.perform(post("/api/logout")
+            .session(mockSession));
 
         // then
-        mockMvc.perform(post("/api/member/info")
-            .session(mockSession)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(json))
-            .andExpect(
-                content().json("{\"name\":\"name\",\"email\":\"email\",\"introduce\":\"\"}"));
+        Assertions.assertThrows(IllegalStateException.class, () -> {
+            mockSession.getAttribute(SessionConst.LOGIN_MEMBER);
+        });
     }
 }
