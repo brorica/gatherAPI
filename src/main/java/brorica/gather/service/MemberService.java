@@ -2,6 +2,7 @@ package brorica.gather.service;
 
 import brorica.gather.domain.Member;
 import brorica.gather.repository.MemberRepository;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,7 @@ public class MemberService {
     public Member findMember(Long id) {
         Optional<Member> findMember = memberRepository.findById(id);
         if (findMember.isEmpty()) {
-            throw new IllegalStateException("존재하지 않는 멤버입니다.");
+            throw new NoSuchElementException("존재하지 않는 멤버입니다.");
         }
         return findMember.get();
     }
@@ -44,7 +45,7 @@ public class MemberService {
     public Member findMember(String name) {
         Optional<Member> findMember = memberRepository.findByName(name);
         if (findMember.isEmpty()) {
-            throw new IllegalStateException("존재하지 않는 멤버입니다.");
+            throw new NoSuchElementException("존재하지 않는 멤버입니다.");
         }
         return findMember.get();
     }
@@ -52,7 +53,7 @@ public class MemberService {
     public Member findMemberByEmail(String email) {
         Optional<Member> findMember = memberRepository.findByEmail(email);
         if (findMember.isEmpty()) {
-            throw new IllegalStateException("존재하지 않는 멤버입니다.");
+            throw new NoSuchElementException("존재하지 않는 멤버입니다.");
         }
         return findMember.get();
     }
