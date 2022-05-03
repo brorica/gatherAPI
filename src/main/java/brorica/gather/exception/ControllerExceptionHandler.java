@@ -1,6 +1,8 @@
 package brorica.gather.exception;
 
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -11,7 +13,13 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(IllegalStateException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ErrorMessage duplicateException(Exception exception) {
+    public ErrorMessage illegalStateException (Exception exception, HttpServletRequest request) {
+        return new ErrorMessage(exception.getMessage(), LocalDateTime.now());
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorMessage noSuchElementException (Exception exception) {
         return new ErrorMessage(exception.getMessage(), LocalDateTime.now());
     }
 }

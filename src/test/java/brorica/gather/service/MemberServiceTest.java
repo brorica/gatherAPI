@@ -2,6 +2,7 @@ package brorica.gather.service;
 
 import brorica.gather.domain.Member;
 import brorica.gather.repository.MemberRepository;
+import java.util.NoSuchElementException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -46,7 +47,7 @@ class MemberServiceTest {
         memberService.remove(member);
 
         // then
-        Assertions.assertThrows(IllegalStateException.class, () -> {
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
             memberService.findMember(member.getId());
         });
     }

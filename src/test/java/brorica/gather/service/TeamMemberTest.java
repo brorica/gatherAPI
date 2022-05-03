@@ -8,6 +8,7 @@ import brorica.gather.repository.MemberRepository;
 import brorica.gather.repository.TeamMemberQueryDSL;
 import brorica.gather.repository.TeamMemberRepository;
 import brorica.gather.repository.TeamRepository;
+import java.util.NoSuchElementException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -81,7 +82,7 @@ public class TeamMemberTest {
         teamMemberService.leftTeam(team, member);
 
         // then
-        Assertions.assertThrows(IllegalStateException.class, () -> {
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
             teamMemberService.findTeamMember(team, member);
         });
     }
