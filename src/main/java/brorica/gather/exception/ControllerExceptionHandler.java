@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.util.NestedServletException;
 
 @RestControllerAdvice
 public class ControllerExceptionHandler {
@@ -20,6 +21,12 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorMessage noSuchElementException (Exception exception) {
+        return new ErrorMessage(exception.getMessage(), LocalDateTime.now());
+    }
+
+    @ExceptionHandler(NestedServletException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorMessage nestedServletException (Exception exception) {
         return new ErrorMessage(exception.getMessage(), LocalDateTime.now());
     }
 }

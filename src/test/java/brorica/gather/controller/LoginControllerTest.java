@@ -38,20 +38,18 @@ class LoginControllerTest {
     public void 로그인성공() throws Exception {
         // given
         MemberRequest memberRequest = new MemberRequest("name", "email", "password");
-        String createJson = objectMapper.writeValueAsString(memberRequest);
         LoginRequest loginRequest = new LoginRequest(memberRequest.getEmail(),
             memberRequest.getPassword());
-        String loginJson = objectMapper.writeValueAsString(loginRequest);
 
         // when
         mockMvc.perform(post("/api/member/join")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(createJson));
+            .content(objectMapper.writeValueAsString(memberRequest)));
 
         // then
         mockMvc.perform(post("/api/login")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(loginJson))
+            .content(objectMapper.writeValueAsString(loginRequest)))
             .andExpect(status().isOk());
     }
 
@@ -59,19 +57,17 @@ class LoginControllerTest {
     public void 로그인실패() throws Exception {
         // given
         MemberRequest memberRequest = new MemberRequest("name", "email", "password");
-        String createJson = objectMapper.writeValueAsString(memberRequest);
         LoginRequest loginRequest = new LoginRequest(memberRequest.getEmail(), "wrong password");
-        String loginJson = objectMapper.writeValueAsString(loginRequest);
 
         // when
         mockMvc.perform(post("/api/member/join")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(createJson));
+            .content(objectMapper.writeValueAsString(memberRequest)));
 
         // then
         mockMvc.perform(post("/api/login")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(loginJson))
+            .content(objectMapper.writeValueAsString(loginRequest)))
             .andExpect(status().isBadRequest());
     }
 

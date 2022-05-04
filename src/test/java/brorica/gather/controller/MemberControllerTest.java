@@ -37,12 +37,11 @@ class MemberControllerTest {
     public void 멤버가입성공() throws Exception {
         // given
         MemberRequest memberRequest = new MemberRequest("name", "email", "password");
-        String json = objectMapper.writeValueAsString(memberRequest);
 
         // when, then
         mockMvc.perform(post("/api/member/join")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(json))
+            .content(objectMapper.writeValueAsString(memberRequest)))
             .andExpect(status().isOk());
     }
 
@@ -52,18 +51,15 @@ class MemberControllerTest {
         MemberRequest memberRequest1 = new MemberRequest("name1", "email1", "password1");
         MemberRequest memberRequest2 = new MemberRequest("name2", "email1", "password1");
 
-        String json1 = objectMapper.writeValueAsString(memberRequest1);
-        String json2 = objectMapper.writeValueAsString(memberRequest2);
-
         // when
         mockMvc.perform(post("/api/member/join")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(json1));
+            .content(objectMapper.writeValueAsString(memberRequest1)));
 
         // then
         mockMvc.perform(post("/api/member/join")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(json2))
+            .content(objectMapper.writeValueAsString(memberRequest2)))
             .andExpect(status().isBadRequest());
     }
 
@@ -71,20 +67,19 @@ class MemberControllerTest {
     public void 회원정보조회() throws Exception {
         // given
         MemberRequest memberRequest = new MemberRequest("name", "email", "password");
-        String json = objectMapper.writeValueAsString(memberRequest);
         MockHttpSession mockSession = new MockHttpSession();
         mockSession.setAttribute(SessionConst.LOGIN_MEMBER, "test");
 
         // when
         mockMvc.perform(post("/api/member/join")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(json));
+            .content(objectMapper.writeValueAsString(memberRequest)));
 
         // then
         mockMvc.perform(post("/api/member/info")
             .session(mockSession)
             .contentType(MediaType.APPLICATION_JSON)
-            .content(json))
+            .content(objectMapper.writeValueAsString(memberRequest)))
             .andExpect(
                 content().json("{\"name\":\"name\",\"email\":\"email\",\"introduce\":\"\"}"));
     }
