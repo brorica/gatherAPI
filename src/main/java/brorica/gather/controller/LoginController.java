@@ -21,8 +21,9 @@ public class LoginController {
     private final int sessionDuration = 1800;
 
     @PostMapping("/api/login")
-    public ResponseEntity login(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false)
-    @RequestBody LoginRequest body, HttpServletRequest request) {
+    public ResponseEntity login(
+        @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false)
+        @RequestBody LoginRequest body, HttpServletRequest request) {
         Member loginMember = loginService.login(body.getEmail(), body.getPassword());
         HttpSession session = request.getSession();
         session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember.getId());

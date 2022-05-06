@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TeamRequest {
+public class CreateTeamRequest {
+
     private String name;
     private String introduce;
 

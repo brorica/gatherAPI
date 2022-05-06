@@ -14,19 +14,19 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(IllegalStateException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ErrorMessage illegalStateException (Exception exception, HttpServletRequest request) {
+    public ErrorMessage illegalStateException(Exception exception, HttpServletRequest request) {
         return new ErrorMessage(exception.getMessage(), LocalDateTime.now());
     }
 
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ErrorMessage noSuchElementException (Exception exception) {
+    public ErrorMessage noSuchElementException(Exception exception) {
         return new ErrorMessage(exception.getMessage(), LocalDateTime.now());
     }
 
     @ExceptionHandler(NestedServletException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ErrorMessage nestedServletException (Exception exception) {
+    public ErrorMessage nestedServletException(Exception exception) {
         return new ErrorMessage(exception.getMessage(), LocalDateTime.now());
     }
 }

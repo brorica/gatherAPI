@@ -16,9 +16,11 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class MemberControllerTest {
 
     @Autowired

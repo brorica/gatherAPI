@@ -3,8 +3,8 @@ package brorica.gather.controller;
 import brorica.gather.config.SessionConst;
 import brorica.gather.domain.Member;
 import brorica.gather.domain.Team;
-import brorica.gather.dto.member.MemberResponse;
-import brorica.gather.dto.team.TeamRequest;
+import brorica.gather.dto.team.CreateTeamRequest;
+import brorica.gather.dto.team.JoinTeamRequest;
 import brorica.gather.service.MemberService;
 import brorica.gather.service.TeamMemberService;
 import brorica.gather.service.TeamService;
@@ -25,7 +25,8 @@ public class TeamController {
     private final TeamMemberService teamMemberService;
 
     @PostMapping("/api/team/create")
-    public ResponseEntity<TeamRequest> createTeam(@RequestBody TeamRequest req, HttpServletRequest request) {
+    public ResponseEntity<CreateTeamRequest> createTeam(@RequestBody CreateTeamRequest req,
+        HttpServletRequest request) {
         HttpSession session = request.getSession();
         Long memberId = SessionConst.getLoginMemberId(session);
         Member member = memberService.findMember(memberId);
@@ -33,5 +34,16 @@ public class TeamController {
         teamMemberService.createTeam(savedTeam, member);
         return ResponseEntity.ok()
             .body(req);
+    }
+
+    @PostMapping("/api/team/join")
+    public ResponseEntity<CreateTeamRequest> joinTeam(@RequestBody JoinTeamRequest req,
+        HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Long memberId = SessionConst.getLoginMemberId(session);
+        Member member = memberService.findMember(memberId);
+        Team findTeam = teamService.findTeam(req.getTeamId());
+        teamMemberService.joinMember(findTeam, member);
+        return ResponseEntity.ok().build();
     }
 }
