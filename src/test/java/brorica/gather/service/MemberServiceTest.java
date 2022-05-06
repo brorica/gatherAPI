@@ -1,30 +1,19 @@
 package brorica.gather.service;
 
 import brorica.gather.domain.Member;
-import brorica.gather.repository.MemberRepository;
 import java.util.NoSuchElementException;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
-@Transactional(propagation = Propagation.NOT_SUPPORTED)
+@Transactional
 class MemberServiceTest {
 
     @Autowired
     MemberService memberService;
-
-    @Autowired
-    MemberRepository memberRepository;
-
-    @AfterEach
-    void deleteAll() {
-        memberRepository.deleteAll();
-    }
 
     @Test
     public void 회원가입() {

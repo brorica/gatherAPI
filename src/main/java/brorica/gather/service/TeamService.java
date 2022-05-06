@@ -16,9 +16,9 @@ public class TeamService {
     private final TeamRepository teamRepository;
 
     @Transactional(readOnly = false)
-    public Long save(Team team) {
+    public Team save(Team team) {
         validateDuplicateTeamName(team);
-        return teamRepository.save(team).getId();
+        return teamRepository.save(team);
     }
 
     @Transactional(readOnly = false)

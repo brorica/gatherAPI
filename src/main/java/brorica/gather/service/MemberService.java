@@ -16,10 +16,10 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional(readOnly = false)
-    public Long save(Member member) {
+    public Member save(Member member) {
         validateDuplicateMemberName(member);
         validateDuplicateMemberEmail(member);
-        return memberRepository.save(member).getId();
+        return memberRepository.save(member);
     }
 
     @Transactional(readOnly = false)

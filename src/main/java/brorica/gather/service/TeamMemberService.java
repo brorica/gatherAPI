@@ -6,6 +6,7 @@ import brorica.gather.domain.Team;
 import brorica.gather.domain.TeamMember;
 import brorica.gather.repository.TeamMemberQueryDSL;
 import brorica.gather.repository.TeamMemberRepository;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -60,5 +61,9 @@ public class TeamMemberService {
             throw new NoSuchElementException("해당 회원은 이 모임에 가입되지 않았습니다.");
         }
         return findTeamMember.get();
+    }
+
+    public List<TeamMember> getTeamMembers(Long teamId) {
+        return teamMemberQueryDSL.getTeamMemberList(teamId);
     }
 }
