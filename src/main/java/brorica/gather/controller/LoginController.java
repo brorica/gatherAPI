@@ -24,7 +24,7 @@ public class LoginController {
     public ResponseEntity login(
         @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false)
         @RequestBody LoginRequest body, HttpServletRequest request) {
-        Member loginMember = loginService.login(body.getEmail(), body.getPassword());
+        Member loginMember = loginService.login(body);
         HttpSession session = request.getSession();
         session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember.getId());
         session.setMaxInactiveInterval(sessionDuration);

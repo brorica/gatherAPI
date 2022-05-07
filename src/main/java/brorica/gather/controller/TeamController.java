@@ -28,8 +28,7 @@ public class TeamController {
     public ResponseEntity<CreateTeamRequest> createTeam(@RequestBody CreateTeamRequest req,
         HttpServletRequest request) {
         HttpSession session = request.getSession();
-        Long memberId = SessionConst.getLoginMemberId(session);
-        Member member = memberService.findMember(memberId);
+        Member member = memberService.findMember(SessionConst.getLoginMemberId(session));
         Team savedTeam = teamService.save(req.toTeam());
         teamMemberService.createTeam(savedTeam, member);
         return ResponseEntity.ok()
@@ -40,8 +39,7 @@ public class TeamController {
     public ResponseEntity<CreateTeamRequest> joinTeam(@RequestBody JoinTeamRequest req,
         HttpServletRequest request) {
         HttpSession session = request.getSession();
-        Long memberId = SessionConst.getLoginMemberId(session);
-        Member member = memberService.findMember(memberId);
+        Member member = memberService.findMember(SessionConst.getLoginMemberId(session));
         Team findTeam = teamService.findTeam(req.getTeamId());
         teamMemberService.joinMember(findTeam, member);
         return ResponseEntity.ok().build();
