@@ -1,12 +1,9 @@
 package brorica.gather.controller;
 
-import brorica.gather.config.SessionConst;
 import brorica.gather.domain.Member;
 import brorica.gather.dto.member.MemberRequest;
 import brorica.gather.dto.member.MemberResponse;
 import brorica.gather.service.MemberService;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
