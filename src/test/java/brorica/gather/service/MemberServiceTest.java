@@ -6,10 +6,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
-@Transactional
+@Transactional(propagation = Propagation.NOT_SUPPORTED)
 class MemberServiceTest {
 
     @Autowired
@@ -21,6 +22,7 @@ class MemberServiceTest {
         Member member = createMember("member1", "email1");
         // when
         memberService.save(member);
+      
         // then
         Member findMember = memberService.findMember(member.getId());
         Assertions.assertEquals(member.getId(), findMember.getId());

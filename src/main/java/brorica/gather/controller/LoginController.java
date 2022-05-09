@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 public class LoginController {
 
     private final LoginService loginService;
+  
     private final int sessionDuration = 1800;
 
     @PostMapping("/api/login")
@@ -36,5 +37,4 @@ public class LoginController {
         request.getSession().invalidate();
         return ResponseEntity.ok().build();
     }
-
 }
