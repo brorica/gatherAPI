@@ -6,6 +6,8 @@ import brorica.gather.dto.member.MemberResponse;
 import brorica.gather.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,9 +25,9 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/api/member/info")
-    public ResponseEntity<MemberResponse> getMemberInfo(@RequestBody MemberRequest req) {
-        Member member = memberService.findMemberByEmail(req.getEmail());
+    @GetMapping("/api/member/{memberId}")
+    public ResponseEntity<MemberResponse> getMemberInfo(@PathVariable long memberId) {
+        Member member = memberService.findMember(memberId);
         return ResponseEntity.ok()
             .body(new MemberResponse(member));
     }

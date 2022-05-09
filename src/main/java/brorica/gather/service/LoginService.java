@@ -1,6 +1,7 @@
 package brorica.gather.service;
 
 import brorica.gather.domain.Member;
+import brorica.gather.dto.member.LoginRequest;
 import brorica.gather.repository.MemberRepository;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -13,9 +14,9 @@ public class LoginService {
 
     private final MemberRepository memberRepository;
 
-    public Member login(String email, String password) {
-        Optional<Member> findMember = memberRepository.findByEmail(email)
-            .filter(member -> member.getPassword().equals(password));
+    public Member login(LoginRequest loginRequest) {
+        Optional<Member> findMember = memberRepository.findByEmail(loginRequest.getEmail())
+            .filter(member -> member.getPassword().equals(loginRequest.getPassword()));
         if (findMember.isEmpty()) {
             throw new NoSuchElementException("가입되지 않은 회원입니다.");
         }

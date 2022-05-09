@@ -1,6 +1,6 @@
 package brorica.gather.service;
 
-import brorica.gather.domain.Team;r
+import brorica.gather.domain.Team;
 import java.util.NoSuchElementException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
