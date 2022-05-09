@@ -2,6 +2,7 @@ package brorica.gather.service;
 
 import brorica.gather.domain.Team;
 import brorica.gather.repository.TeamRepository;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,9 +16,9 @@ public class TeamService {
     private final TeamRepository teamRepository;
 
     @Transactional(readOnly = false)
-    public Long save(Team team) {
+    public Team save(Team team) {
         validateDuplicateTeamName(team);
-        return teamRepository.save(team).getId();
+        return teamRepository.save(team);
     }
 
     @Transactional(readOnly = false)
@@ -41,7 +42,7 @@ public class TeamService {
     public Team findTeam(Long teamId) {
         Optional<Team> findTeam = teamRepository.findById(teamId);
         if (findTeam.isEmpty()) {
-            throw new IllegalStateException("존재하지 않는 모임입니다.");
+            throw new NoSuchElementException("존재하지 않는 모임입니다.");
         }
         return findTeam.get();
     }
@@ -49,7 +50,7 @@ public class TeamService {
     public Team findTeam(String name) {
         Optional<Team> findTeam = teamRepository.findByName(name);
         if (findTeam.isEmpty()) {
-            throw new IllegalStateException("존재하지 않는 모임입니다.");
+            throw new NoSuchElementException("존재하지 않는 모임입니다.");
         }
         return findTeam.get();
     }

@@ -1,26 +1,19 @@
 package brorica.gather.service;
 
 import brorica.gather.domain.Team;
-import brorica.gather.repository.TeamRepository;
-import org.junit.jupiter.api.AfterEach;
+import java.util.NoSuchElementException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
+@Transactional
 public class TeamServiceTest {
 
     @Autowired
     TeamService teamService;
-
-    @Autowired
-    TeamRepository teamRepository;
-
-    @AfterEach
-    void deleteAll() {
-        teamRepository.deleteAll();
-    }
 
     @Test
     void 모임생성() {
@@ -60,7 +53,7 @@ public class TeamServiceTest {
         teamService.disband(team);
 
         // then
-        Assertions.assertThrows(IllegalStateException.class, () -> {
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
             teamService.findTeam(team.getId());
         });
     }

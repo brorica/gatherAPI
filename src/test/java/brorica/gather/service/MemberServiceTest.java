@@ -1,8 +1,7 @@
 package brorica.gather.service;
 
 import brorica.gather.domain.Member;
-import brorica.gather.repository.MemberRepository;
-import org.junit.jupiter.api.AfterEach;
+import java.util.NoSuchElementException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,20 +16,13 @@ class MemberServiceTest {
     @Autowired
     MemberService memberService;
 
-    @Autowired
-    MemberRepository memberRepository;
-
-    @AfterEach
-    void deleteAll() {
-        memberRepository.deleteAll();
-    }
-
     @Test
     public void 회원가입() {
         // given
         Member member = createMember("member1", "email1");
         // when
         memberService.save(member);
+      
         // then
         Member findMember = memberService.findMember(member.getId());
         Assertions.assertEquals(member.getId(), findMember.getId());
@@ -46,7 +38,7 @@ class MemberServiceTest {
         memberService.remove(member);
 
         // then
-        Assertions.assertThrows(IllegalStateException.class, () -> {
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
             memberService.findMember(member.getId());
         });
     }
