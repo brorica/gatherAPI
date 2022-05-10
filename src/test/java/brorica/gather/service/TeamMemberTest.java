@@ -72,7 +72,7 @@ public class TeamMemberTest {
         teamMemberService.leftTeam(team, member);
 
         // then
-        Assertions.assertThrows(NoSuchElementException.class, () -> {r
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
             teamMemberService.findTeamMember(team, member);
         });
     }

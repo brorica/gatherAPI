@@ -4,7 +4,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import brorica.gather.dto.member.MemberRequest;
+import brorica.gather.dto.member.CreateMemberRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,30 +36,30 @@ class MemberControllerTest {
     @Test
     public void 멤버가입성공() throws Exception {
         // given
-        MemberRequest memberRequest = new MemberRequest("name", "email", "password");
+        CreateMemberRequest createMemberRequest = new CreateMemberRequest("name", "email", "password");
 
         // when, then
-        mockMvc.perform(post("/api/member/join")
+        mockMvc.perform(post("/api/member")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(memberRequest)))
+            .content(objectMapper.writeValueAsString(createMemberRequest)))
             .andExpect(status().isOk());
     }
 
     @Test
     public void 이메일중복가입() throws Exception {
         // given
-        MemberRequest memberRequest1 = new MemberRequest("name1", "email1", "password1");
-        MemberRequest memberRequest2 = new MemberRequest("name2", "email1", "password1");
+        CreateMemberRequest createMemberRequest1 = new CreateMemberRequest("name1", "email1", "password1");
+        CreateMemberRequest createMemberRequest2 = new CreateMemberRequest("name2", "email1", "password1");
 
         // when
-        mockMvc.perform(post("/api/member/join")
+        mockMvc.perform(post("/api/member")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(memberRequest1)));
+            .content(objectMapper.writeValueAsString(createMemberRequest1)));
 
         // then
-        mockMvc.perform(post("/api/member/join")
+        mockMvc.perform(post("/api/member")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(memberRequest2)))
+            .content(objectMapper.writeValueAsString(createMemberRequest2)))
             .andExpect(status().isBadRequest());
     }
 
@@ -71,12 +71,12 @@ class MemberControllerTest {
     @Test
     public void 회원정보조회() throws Exception {
         // given
-        MemberRequest memberRequest = new MemberRequest("name", "email", "password");
+        CreateMemberRequest createMemberRequest = new CreateMemberRequest("name", "email", "password");
 
         // when
-        mockMvc.perform(post("/api/member/join")
+        mockMvc.perform(post("/api/member")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(memberRequest)));
+            .content(objectMapper.writeValueAsString(createMemberRequest)));
 
         // then
         mockMvc.perform(get("/api/member/3"))

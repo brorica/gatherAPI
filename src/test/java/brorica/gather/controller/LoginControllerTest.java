@@ -5,7 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import brorica.gather.config.SessionConst;
 import brorica.gather.dto.member.LoginRequest;
-import brorica.gather.dto.member.MemberRequest;
+import brorica.gather.dto.member.CreateMemberRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -39,14 +39,14 @@ class LoginControllerTest {
     @Test
     public void 로그인성공() throws Exception {
         // given
-        MemberRequest memberRequest = new MemberRequest("name", "email", "password");
-        LoginRequest loginRequest = new LoginRequest(memberRequest.getEmail(),
-            memberRequest.getPassword());
+        CreateMemberRequest createMemberRequest = new CreateMemberRequest("name", "email", "password");
+        LoginRequest loginRequest = new LoginRequest(createMemberRequest.getEmail(),
+            createMemberRequest.getPassword());
 
         // when
-        mockMvc.perform(post("/api/member/join")
+        mockMvc.perform(post("/api/member")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(memberRequest)));
+            .content(objectMapper.writeValueAsString(createMemberRequest)));
 
         // then
         mockMvc.perform(post("/api/login")
@@ -58,13 +58,13 @@ class LoginControllerTest {
     @Test
     public void 로그인실패() throws Exception {
         // given
-        MemberRequest memberRequest = new MemberRequest("name", "email", "password");
-        LoginRequest loginRequest = new LoginRequest(memberRequest.getEmail(), "wrong password");
+        CreateMemberRequest createMemberRequest = new CreateMemberRequest("name", "email", "password");
+        LoginRequest loginRequest = new LoginRequest(createMemberRequest.getEmail(), "wrong password");
 
         // when
-        mockMvc.perform(post("/api/member/join")
+        mockMvc.perform(post("/api/member")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(memberRequest)));
+            .content(objectMapper.writeValueAsString(createMemberRequest)));
 
         // then
         mockMvc.perform(post("/api/login")

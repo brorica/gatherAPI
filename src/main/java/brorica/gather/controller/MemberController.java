@@ -1,8 +1,8 @@
 package brorica.gather.controller;
 
 import brorica.gather.domain.Member;
-import brorica.gather.dto.member.MemberRequest;
-import brorica.gather.dto.member.MemberResponse;
+import brorica.gather.dto.member.CreateMemberRequest;
+import brorica.gather.dto.member.GetMemberResponse;
 import brorica.gather.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,17 +18,17 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @PostMapping("/api/member/join")
-    public ResponseEntity createMember(@RequestBody MemberRequest req) {
+    @PostMapping("/api/member")
+    public ResponseEntity createMember(@RequestBody CreateMemberRequest req) {
         Member member = req.toMember();
         memberService.save(member);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/api/member/{memberId}")
-    public ResponseEntity<MemberResponse> getMemberInfo(@PathVariable long memberId) {
+    public ResponseEntity<GetMemberResponse> getMemberInfo(@PathVariable long memberId) {
         Member member = memberService.findMember(memberId);
         return ResponseEntity.ok()
-            .body(new MemberResponse(member));
+            .body(new GetMemberResponse(member));
     }
 }

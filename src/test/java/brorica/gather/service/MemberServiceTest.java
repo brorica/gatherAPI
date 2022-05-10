@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
-@Transactional(propagation = Propagation.NOT_SUPPORTED)
+@Transactional
 class MemberServiceTest {
 
     @Autowired

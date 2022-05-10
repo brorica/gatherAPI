@@ -51,7 +51,7 @@ class TeamControllerTest {
         mockSession.setAttribute(SessionConst.LOGIN_MEMBER, savedMember.getId());
 
         // then
-        mockMvc.perform(post("/api/team/create")
+        mockMvc.perform(post("/api/team")
             .session(mockSession)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(createTeamRequest)))
@@ -70,7 +70,7 @@ class TeamControllerTest {
         mockSession.setAttribute(SessionConst.LOGIN_MEMBER, -1L);
 
         // then
-        mockMvc.perform(post("/api/team/create")
+        mockMvc.perform(post("/api/team")
             .session(mockSession)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(createTeamRequest)))

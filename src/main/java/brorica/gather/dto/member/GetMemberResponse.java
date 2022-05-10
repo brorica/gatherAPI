@@ -6,13 +6,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MemberResponse {
+public class GetMemberResponse {
 
     private String name;
     private String email;
     private String introduce;
 
-    public MemberResponse(Member member) {
+    public GetMemberResponse(Member member) {
         name = member.getName();
         email = member.getEmail();
         introduce = member.getIntroduce();

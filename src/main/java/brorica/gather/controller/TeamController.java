@@ -24,7 +24,7 @@ public class TeamController {
     private final MemberService memberService;
     private final TeamMemberService teamMemberService;
 
-    @PostMapping("/api/team/create")
+    @PostMapping("/api/team")
     public ResponseEntity<CreateTeamRequest> createTeam(@RequestBody CreateTeamRequest req,
         HttpServletRequest request) {
         HttpSession session = request.getSession();
